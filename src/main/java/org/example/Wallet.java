@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Wallet {
@@ -8,8 +9,6 @@ public class Wallet {
     private List<Card> cards = new ArrayList<>();
     private double cash;
 
-    public Wallet() {
-    }
     public Wallet(Owner owner, List<Card> cards, double cash) {
         this.setOwner(owner);
         this.setCards(cards);
@@ -65,11 +64,19 @@ public class Wallet {
     }
 
     public void removeCard(int accountNumber) {
-        this.cards.forEach(card -> {
+        Iterator<Card> iterator = cards.iterator();
+        while (iterator.hasNext()) {
+            Card card = iterator.next();
             if (card.getAccountNumber() == accountNumber) {
-                this.cards.remove(card);
+                iterator.remove();
+                break; // Exit loop once the card is removed
             }
-        });
+        }
     }
 
+
+    public short displayWalletBalance() {
+        System.out.println("Jumlah uang di dompet: " + cash);
+        return 0;
+    }
 }
