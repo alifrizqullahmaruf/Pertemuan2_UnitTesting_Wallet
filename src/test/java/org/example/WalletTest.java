@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 class WalletTest {
@@ -64,13 +65,9 @@ class WalletTest {
     // Test Add Card
     @Test
     public void testAddCardWithDuplicateAccountNumber() {
-        List<Card> cards = new ArrayList<>();
-        Card card1 = new Card();
-        card1.setAccountNumber(123456789);
-        cards.add(card1);
-
-        Wallet wallet = new Wallet(new Owner("ALipp", 63), cards, 0.0);
+        Wallet wallet = new Wallet(new Owner("ALipp", 63), new ArrayList<>(), 0.0);
         wallet.addCards("Bank XYZ", 123456789);
+        wallet.addCards("Bank XYZ", 123456789); // Adding duplicate card
         assertEquals(1, wallet.getCards().size());
     }
 
@@ -85,26 +82,27 @@ class WalletTest {
     // Test Remove Card
     @Test
     public void testRemoveNonExistingCard() {
-        List<Card> cards = new ArrayList<>();
-        Card card1 = new Card();
-        card1.setAccountNumber(123456789);
-        cards.add(card1);
+        Wallet wallet = new Wallet(new Owner("ALipp", 63), new ArrayList<>(), 0.0);
+        wallet.addCards("Bank ABC", 123456789);
 
-        Wallet wallet = new Wallet(new Owner("ALipp", 63), cards, 0.0);
         wallet.removeCard(987654321); // Trying to remove a non-existing card
         assertEquals(1, wallet.getCards().size());
+        assertNotNull(wallet.getCardByAccountNumber(123456789));
     }
 
     @Test
     public void testRemoveExistingCard() {
-        List<Card> cards = new ArrayList<>();
-        Card card1 = new Card();
-        card1.setAccountNumber(123456789);
-        cards.add(card1);
+        Wallet wallet = new Wallet(new Owner("ALipp", 63), new ArrayList<>(), 0.0);
+        wallet.addCards("Bank ABC", 123456789);
 
-        Wallet wallet = new Wallet(new Owner("ALipp", 63), cards, 0.0);
         wallet.removeCard(123456789);
         assertEquals(0, wallet.getCards().size());
+        assertNull(wallet.getCardByAccountNumber(123456789));
     }
 
+    @Test
+    public void testDisplayWalletBalance() {
+        Wallet wallet = new Wallet(new Owner("ALipp", 63), new ArrayList<>(), 100.0);
+        assertEquals(0, wallet.displayWalletBalance());
+    }
 }

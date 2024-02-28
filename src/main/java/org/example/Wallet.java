@@ -74,6 +74,14 @@ public class Wallet {
         }
     }
 
+    public Card getCardByAccountNumber(int accountNumber) {
+        for (Card card : cards) {
+            if (card.getAccountNumber() == accountNumber) {
+                return card;
+            }
+        }
+        return null; // Return null if no card with the specified account number is found
+    }
 
     public short displayWalletBalance() {
         System.out.println("Jumlah uang di dompet: " + cash);
